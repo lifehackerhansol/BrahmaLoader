@@ -12,6 +12,14 @@ Current status :
 Brahma - Privilege elevation exploit for the Nintendo 3DS
 =========================================================
 
+  Brahma 'Loader' branch
+  ----------------------
+  This is a special branch of Brahma that has been modified to load payloads
+  directly (contrary to what is written below). Just rename your ARM9 payload
+  (places to get payloads below) to payload.bin and drop it into the 'data'
+  directory. Then open shell and run make. You may also edit 'AppInfo' and
+  'icon.png' in the resources subdirectory for further customizations. 
+  
   WTF is 'Brahma'?
   ----------------
   Brahma is a development tool for the Nintendo 3DS platform that enables
