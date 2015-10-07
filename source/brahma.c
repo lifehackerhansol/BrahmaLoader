@@ -39,7 +39,7 @@ void redirect_codeflow (u32 *dst_addr, u32 *src_addr) {
    to 3DS model and firmware version
    returns: 0 on failure, 1 on success */ 
 s32 get_exploit_data (struct exploit_data *data) {
-	u32 fversion = 0;    
+	u32 fversion = 0;	
 	u8  isN3DS = 0;
 	s32 i;
 	s32 result = 0;
@@ -99,7 +99,7 @@ s32 recv_arm9_payload (void) {
 	sa.sin_port = htons(BRAHMA_NETWORK_PORT);
 	sa.sin_addr.s_addr = gethostid();
 
-    if (bind(sockfd, (struct sockaddr*)&sa, sizeof(sa)) != 0) {
+	if (bind(sockfd, (struct sockaddr*)&sa, sizeof(sa)) != 0) {
 		printf("[!] Error: bind()\n");
 		close(sockfd);
 		return 0;
@@ -147,7 +147,7 @@ s32 recv_arm9_payload (void) {
 	u32 total = 0;
 	s32 overflow = 0;
 	while ((recvd = recv(clientfd, g_ext_arm9_buf + total,
-	                     ARM9_PAYLOAD_MAX_SIZE - total, 0)) != 0) {
+						 ARM9_PAYLOAD_MAX_SIZE - total, 0)) != 0) {
 		if (recvd != -1) {
 			total += recvd;
 			printf(".");
@@ -173,8 +173,10 @@ s32 recv_arm9_payload (void) {
 
 /* reads ARM9 payload from a given path.
    filename: full path of payload
+   offset: offset of the payload
+   psize: if > 0 size of the payload
    returns: 0 on failure, 1 on success */
-s32 load_arm9_payload (char *filename) {
+s32 load_arm9_payload (char *filename, u32 offset, u32 psize) {
 	s32 result = 0;
 	u32 fsize = 0;
 
@@ -183,13 +185,20 @@ s32 load_arm9_payload (char *filename) {
 
 	FILE *f = fopen(filename, "rb");
 	if (f) {
-		fseek(f , 0, SEEK_END);
+		fseek(f, 0, SEEK_END);
 		fsize = ftell(f);
-		g_ext_arm9_size = fsize;
-		rewind(f);
-		if (fsize >= 8 && (fsize <= ARM9_PAYLOAD_MAX_SIZE)) {
-				u32 bytes_read = fread(g_ext_arm9_buf, 1, fsize, f);
-				result = (g_ext_arm9_loaded = (bytes_read == fsize));
+		if (offset + psize <= fsize) {
+			if (psize == 0) {
+				psize = fsize - offset;
+				if (offset > 0 && psize > ARM9_PAYLOAD_MAX_SIZE)
+					psize = ARM9_PAYLOAD_MAX_SIZE; // only fix when offset > 0
+			}
+			fseek(f, offset, SEEK_SET);
+			g_ext_arm9_size = psize;
+			if (psize >= 8 && (psize <= ARM9_PAYLOAD_MAX_SIZE)) {
+				u32 bytes_read = fread(g_ext_arm9_buf, 1, psize, f);
+				result = (g_ext_arm9_loaded = (bytes_read == psize));
+			}
 		}
 		fclose(f);
 	}
@@ -214,13 +223,13 @@ s32 load_arm9_payload_from_mem (u8* data, u32 dsize) {
 
 /* copies ARM9 payload to FCRAM
    - before overwriting it in memory, Brahma creates a backup copy of
-     the mapped firm binary's ARM9 entry point. The copy will be stored
-     into offset 4 of the ARM9 payload during run-time.
-     This allows the ARM9 payload to resume booting the Nintendo firmware
-     code.
-     Thus, the format of ARM9 payload written for Brahma is the following:
-     - a branch instruction at offset 0 and
-     - a placeholder (u32) at offset 4 (=ARM9 entrypoint) */ 
+	 the mapped firm binary's ARM9 entry point. The copy will be stored
+	 into offset 4 of the ARM9 payload during run-time.
+	 This allows the ARM9 payload to resume booting the Nintendo firmware
+	 code.
+	 Thus, the format of ARM9 payload written for Brahma is the following:
+	 - a branch instruction at offset 0 and
+	 - a placeholder (u32) at offset 4 (=ARM9 entrypoint) */ 
 s32 map_arm9_payload (void) {
 	void *src;
 	volatile void *dst;
@@ -272,7 +281,7 @@ s32 map_arm11_payload (void) {
 	size = sizeof(g_arm11shared);
 	
 	dst = (u8 *)(g_expdata.va_exc_handler_base_W +
-	      OFFS_EXC_HANDLER_UNUSED + offs);
+		  OFFS_EXC_HANDLER_UNUSED + offs);
 
 	// TODO sanitize 'size'
 	if (result_a && size) {
@@ -286,7 +295,7 @@ s32 map_arm11_payload (void) {
 void exploit_arm9_race_condition (void) {
 
 	s32 (* const _KernelSetState)(u32, u32, u32, u32) =
-	    (void *)g_expdata.va_kernelsetstate;
+		(void *)g_expdata.va_kernelsetstate;
 	
 	asm volatile ("clrex");
 
@@ -299,12 +308,12 @@ void exploit_arm9_race_condition (void) {
 		   our code (hook1 and hook2) as soon as a
 		   "firmlaunch" is triggered */ 	 
 		redirect_codeflow(g_expdata.va_exc_handler_base_X +
-		                  OFFS_EXC_HANDLER_UNUSED,
-		                  g_expdata.va_patch_hook1);
+						  OFFS_EXC_HANDLER_UNUSED,
+						  g_expdata.va_patch_hook1);
 	
 		redirect_codeflow(PA_EXC_HANDLER_BASE +
-		                  OFFS_EXC_HANDLER_UNUSED + 4,
-		                  g_expdata.va_patch_hook2);
+						  OFFS_EXC_HANDLER_UNUSED + 4,
+						  g_expdata.va_patch_hook2);
 
 		CleanEntireDataCache();
 		InvalidateEntireInstructionCache();
@@ -322,14 +331,14 @@ GSP_FramebufferInfo topFramebufferInfo, bottomFramebufferInfo;
 s32 priv_firm_reboot (void) {
 	asm volatile ("cpsid aif");
 	u32 *save = (u32 *)(g_expdata.va_fcram_base + 0x3FFFE00);  
-    save[0] = topFramebufferInfo.framebuf0_vaddr;  
+	save[0] = topFramebufferInfo.framebuf0_vaddr;  
    	save[1] = topFramebufferInfo.framebuf1_vaddr;  
 	save[2] = bottomFramebufferInfo.framebuf0_vaddr;  
 
 // Working around a GCC bug to translate the va address to pa... 
-    save[0] += 0xC000000;  // (pa FCRAM address - va FCRAM address) 
-    save[1] += 0xC000000; 
-    save[2] += 0xC000000; 
+	save[0] += 0xC000000;  // (pa FCRAM address - va FCRAM address) 
+	save[1] += 0xC000000; 
+	save[2] += 0xC000000; 
 
 	exploit_arm9_race_condition();
 	return 0;

@@ -42,6 +42,13 @@ CFLAGS	:=	-g -Wall -O3 -mword-relocations \
 
 CFLAGS	+=	$(INCLUDE) -DARM11 -D_3DS -DARM_ARCH -w
 
+ifdef PAYLOAD_PATH
+	CFLAGS	+=	-DPAYLOAD_PATH=\"$(PAYLOAD_PATH)\"
+	ifdef PAYLOAD_OFFSET
+		CFLAGS	+=	-DPAYLOAD_OFFSET=$(PAYLOAD_OFFSET)
+	endif
+endif
+
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11 -w
 
 ASFLAGS	:=	-g $(ARCH)
@@ -75,7 +82,9 @@ export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
-BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+ifndef PAYLOAD_PATH
+	BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+endif
 
 #---------------------------------------------------------------------------------
 # use CXX for linking C++ projects, CC for standard C
