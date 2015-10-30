@@ -2,7 +2,7 @@
 
 #include "exploitdata.h"
 
-s32 load_arm9_payload (char *filename);
+s32 load_arm9_payload (char *filename, u32 offset, u32 psize);
 s32 load_arm9_payload_from_mem (u8* data, u32 dsize);
 void redirect_codeflow (u32 *dst_addr, u32 *src_addr);
 s32 map_arm9_payload (void);

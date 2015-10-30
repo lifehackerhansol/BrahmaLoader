@@ -42,8 +42,8 @@ void interact_with_user (void) {
 
 s32 quick_boot_firm (s32 load_from_disk) {
 	if (load_from_disk)
-		load_arm9_payload("/arm9payload.bin");
-	firm_reboot();	
+		load_arm9_payload("/arm9payload.bin", 0, 0);
+	firm_reboot();
 }
 
 s32 main (void) {
