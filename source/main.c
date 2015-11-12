@@ -50,6 +50,11 @@ s32 quick_boot_firm (s32 load_from_disk) {
 
 s32 main (int argc, char **argv) {
 	// Initialize services
+	srvInit();
+	aptInit();
+	hidInit();	
+	fsInit();
+	sdmcInit();	
 	gfxInitDefault();
 	gfxSwapBuffers(); 
 	
@@ -104,7 +109,14 @@ s32 main (int argc, char **argv) {
 		wait_any_key();
 	}
 
-	gfxExit();
+	// Exit services
+	gfxExit();	
+	sdmcExit();
+	fsExit();	
+	hidExit();
+	aptExit();
+	srvExit();
+	
 	// Return to hbmenu
 	return 0;
 }
