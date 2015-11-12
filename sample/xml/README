@@ -1,0 +1,37 @@
+XML loader example for use with Brahma 2 / *hax 2.5+
+====================================================
+
+Introduced with *hax 2.5, the HB launcher can now use XML files
+to load .3DSX binaries with start parameters. This folder contains
+one sample XML folder (for autoloading the ReiNAND CFW via Brahma 2)
+and another folder containing a Microsoft Windows batch script to
+easily generate SMDH icon/description files yourself. 
+
+If you just want to try it :
+- Make sure your *hax is up to date, see here: http://smealum.github.io/3ds/
+- Have Brahma 2 ("Brahma2.3dsx"/".smdh") installed in /3DS/Brahma2/
+- Copy "reinand.xml" and "reinand.smdh" to /3DS/
+- Also make sure you have the ReiNAND CFW installed ("reiNand.dat" in root)
+- You have a new entry in your HB launcher, use it to boot ReiNAND via Brahma
+
+If you want to make your own:
+- Open reinand.xml in a text editor of your choice
+- In <args>, put "[PAYLOAD_PATH] [OFFSET_HEX] [MAX_SIZE_HEX]"
+  note: [MAX_SIZE_HEX] and [OFFSET_HEX] are optional, just
+        "/Decrypt9.bin" would be valid as well
+- If you want a custom icon, put the path to your SMDH into <icon>
+
+Creating SMDHs? It's easy... (Windows only)
+- Check out the folder called "zzz_create_smdh"
+- Here, replace the icon.png with a 48x48 icon of your choice
+- Open the file called "create_smdh.bat" in a text editor of your choice
+- Here, replace the names/descriptions/paths as you see fit, then save
+- Run "create_smdh.bat" via a double click in Windows Explorer
+
+Credits:
+- To smealum for making all this possible
+- To patois who originally created Brahma
+- To delebile who ported it to *hax 2.x as Brahma 2
+- To archshift (and originally Normmatt) who provided the project
+  infrastructure along with Decrypt9/bootstrap that this project is based on.
+- 3DBrew
