@@ -8,6 +8,8 @@
 #include "menus.h"
 #include "sochlp.h"
 
+#define BOOTFIX_DELAY 150
+
 void interact_with_user (void) {
 	s32 menuidx = 0;
 	
@@ -65,6 +67,14 @@ s32 main (int argc, char **argv) {
 				printf("[!] Invalid argument: %s\n", argv[1]);
 			} else {
 				printf("[+] payload: %s@%X\n[+] maximum size: %X\n", payload, offset, psize);
+				#ifdef BOOTFIX_DELAY
+				u32 delay = BOOTFIX_DELAY;
+				while (aptMainLoop() && delay-- > 0) {
+					gfxFlushBuffers();
+					gfxSwapBuffers();
+					gspWaitForVBlank();
+				}
+				#endif
 				if (load_arm9_payload(payload, offset, psize))
 					firm_reboot();
 				printf("[!] Loading failed\n");
