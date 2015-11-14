@@ -3,5 +3,9 @@
 *.smdh
 *.bat
 
+/sample/code/*/build
+/sample/code/*/*.bin
+
 /build
 /output
+/release
