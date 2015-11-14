@@ -24,9 +24,9 @@ INCLUDES		:=	include
 #---------------------------------------------------------------------------------
 
 ifneq ($(BUILD),$(notdir $(CURDIR)))
-TOPDIR ?= $(CURDIR)
+	TOPDIR ?= $(CURDIR)
 else
-TOPDIR ?= $(CURDIR)/..
+	TOPDIR ?= $(CURDIR)/..
 endif
 
 include $(TOPDIR)/resources/AppInfo
@@ -47,6 +47,12 @@ ifdef PAYLOAD_PATH
 	ifdef PAYLOAD_OFFSET
 		CFLAGS	+=	-DPAYLOAD_OFFSET=$(PAYLOAD_OFFSET)
 	endif
+	ifdef PAYLOAD_MAXSIZE
+		CFLAGS	+=	-DPAYLOAD_MAXSIZE=$(PAYLOAD_MAXSIZE)
+	endif
+endif
+ifdef VOODOO
+	CFLAGS	+=	-DVOODOO=$(VOODOO)
 endif
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions -std=gnu++11 -w
