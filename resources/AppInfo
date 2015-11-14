@@ -5,9 +5,14 @@
 #
 # PAYLOAD_PATH: Path to the ARM9 payload on the 3DS SD card (don't forget "//")
 # PAYLOAD_OFFSET: Offset of the ARM9 payload in the file given above
+# PAYLOAD_MAXSIZE: Maximum size of the ARM9 payload, cannot exceed 0x100000
+#
+# VOODOO: This may be used to boost the boot rate of a given payload, it can take
+#  values from 0x0...0xF, experimentation is recommended
 #
 # If PAYLOAD_PATH is not given, payload is loaded from memory (data dir in source)
 # PAYLOAD_OFFSET is optional if offset is 0x00000000
+# PAYLOAD_MAXSIZE is ignored if it is zero, and shouldn't be required at all
 #---------------------------------------------------------------------------------
 
 APP_TITLE = BrahmaLoader
@@ -16,3 +21,5 @@ APP_AUTHOR = patois, delebile & d0k3
 
 # PAYLOAD_PATH = //payload.bin
 # PAYLOAD_OFFSET = 0x00000000
+# PAYLOAD_MAXSIZE = 0x00000000
+# VOODOO = 0xF

@@ -3,5 +3,5 @@
 *.smdh
 *.bat
 
-build
-output
+/build
+/output
