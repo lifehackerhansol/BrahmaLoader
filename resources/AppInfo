@@ -7,6 +7,8 @@
 # PAYLOAD_OFFSET: Offset of the ARM9 payload in the file given above
 # PAYLOAD_MAXSIZE: Maximum size of the ARM9 payload, cannot exceed 0x100000
 #
+# PAYLOAD_MEM: If set to anything, force loading the payload from memory
+#
 # VOODOO: This may be used to boost the boot rate of a given payload, it can take
 #  values from 0x0...0xF, experimentation is recommended
 #
@@ -22,4 +24,5 @@ APP_AUTHOR = patois, delebile & d0k3
 # PAYLOAD_PATH = //payload.bin
 # PAYLOAD_OFFSET = 0x00000000
 # PAYLOAD_MAXSIZE = 0x00000000
+# PAYLOAD_MEM = 1
 # VOODOO = 0xF

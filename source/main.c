@@ -92,6 +92,7 @@ s32 main (int argc, char **argv) {
         #ifdef VOODOO
         voodoo = VOODOO;
         #endif
+        #ifndef PAYLOAD_MEM
         #ifdef PAYLOAD_PATH
         strncpy(path, PAYLOAD_PATH, 128);
         #ifdef PAYLOAD_OFFSET
@@ -108,6 +109,7 @@ s32 main (int argc, char **argv) {
             if (res < 2) offset = 0;
             if (res < 1) path[0] = '\0';
         }
+        #endif
         #endif
         if (voodoo_load(path, offset, msize, voodoo))
             firm_reboot();
