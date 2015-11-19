@@ -23,6 +23,7 @@ void error_show(const char *format, ...) {
 
 s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
     u32 res = 0;
+    u32 lorem_ipsum = voodoo & (1<<4);
     u32 boot_delay = ((voodoo>>2)&0x3) * 50;
     u32 magic_fix = voodoo & (1<<1);
     u32 load_svc = voodoo & (1<<0);
@@ -42,6 +43,21 @@ s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
         aptOpenSession();
         APT_SetAppCpuTimeLimit(NULL, 0);
         aptCloseSession();
+    }
+    
+    // lorem ipsum console init / exit
+    if (lorem_ipsum) {
+        consoleInit(GFX_BOTTOM, NULL);
+        printf("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
+        consoleClear();
+        gfxFlushBuffers();
+        gfxSwapBuffers();
+        gspWaitForVBlank();
+        gfxSetScreenFormat(GFX_TOP, GSP_BGR8_OES);
+        gfxSetScreenFormat(GFX_BOTTOM, GSP_BGR8_OES);
+        gfxFlushBuffers();
+        gfxSwapBuffers();
+        gspWaitForVBlank();
     }
     
     // bootfix delay

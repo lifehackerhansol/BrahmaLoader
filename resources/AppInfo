@@ -10,7 +10,7 @@
 # PAYLOAD_MEM: If set to anything, force loading the payload from memory
 #
 # VOODOO: This may be used to boost the boot rate of a given payload, it can take
-#  values from 0x0...0xF, experimentation is recommended
+#  values from 0x00...0x1F, experimentation is recommended
 #
 # If PAYLOAD_PATH is not given, payload is loaded from memory (data dir in source)
 # PAYLOAD_OFFSET is optional if offset is 0x00000000
