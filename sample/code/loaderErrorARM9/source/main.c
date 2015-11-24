@@ -4,7 +4,14 @@
 
 #include "draw.h"
 #include "hid.h"
+#include "i2c.h"
 
+
+void Reboot()
+{
+    i2cWriteRegister(I2C_DEV_MCU, 0x20, 1 << 2);
+    while(true);
+}
 
 void ClearTop() {
 	ClearScreen(TOP_SCREEN0, BG_COLOR);
@@ -31,6 +38,9 @@ int main() {
 	Debug("<press any key to reboot>");
 	InputWait();
 
+    // reboot using i2c
+    Reboot();
+    
 	// return control to FIRM ARM9 code (performs firmlaunch)
 	return 0;
 }
