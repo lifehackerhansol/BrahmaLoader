@@ -21,6 +21,12 @@ void error_show(const char *format, ...) {
     wait_any_key();
 }
 
+void gfx_cycle() {
+    gfxFlushBuffers();
+    gfxSwapBuffers();
+    gspWaitForVBlank();
+}
+
 s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
     u32 res = 0;
     u32 lorem_ipsum = voodoo & (1<<4);
@@ -50,22 +56,20 @@ s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
         consoleInit(GFX_BOTTOM, NULL);
         printf("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
         consoleClear();
-        gfxFlushBuffers();
-        gfxSwapBuffers();
-        gspWaitForVBlank();
-        gfxSetScreenFormat(GFX_TOP, GSP_BGR8_OES);
+        gfx_cycle();
+        consoleInit(GFX_TOP, NULL);
+        printf("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
+        consoleClear();
+        gfx_cycle();
         gfxSetScreenFormat(GFX_BOTTOM, GSP_BGR8_OES);
-        gfxFlushBuffers();
-        gfxSwapBuffers();
-        gspWaitForVBlank();
+        gfxSetScreenFormat(GFX_TOP, GSP_BGR8_OES);
+        gfx_cycle();
     }
     
     // bootfix delay
     if (boot_delay) {
         while (aptMainLoop() && boot_delay-- > 0) {
-            gfxFlushBuffers();
-            gfxSwapBuffers();
-            gspWaitForVBlank();
+            gfx_cycle();
         }
     }
     
@@ -99,12 +103,12 @@ s32 main (int argc, char **argv) {
     u32 msize = 0;
     u32 voodoo = 0;
        
-	// Initialize GFX services
-	gfxInitDefault();
-	gfxSwapBuffers();
+    // Initialize GFX services
+    gfxInitDefault();
+    gfxSwapBuffers();
 
-	if (brahma_init()) {
-		// Get payload parameters
+    if (brahma_init()) {
+        // Get payload parameters
         #ifdef VOODOO
         voodoo = VOODOO;
         #endif
@@ -129,11 +133,11 @@ s32 main (int argc, char **argv) {
         #endif
         if (voodoo_load(path, offset, msize, voodoo))
             firm_reboot();
-		brahma_exit();
-	} else error_show("[!] Not enough memory");
+        brahma_exit();
+    } else error_show("[!] Not enough memory");
 
     // Deinitialize GFX
-	gfxExit();
+    gfxExit();
     
-	return 0;
+    return 0;
 }
