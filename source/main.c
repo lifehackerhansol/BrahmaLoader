@@ -29,7 +29,7 @@ void gfx_cycle() {
 
 s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
     u32 res = 0;
-    u32 lorem_ipsum = voodoo & (1<<4);
+    u32 lorem_ipsum = (voodoo>>4)&0x3;
     u32 boot_delay = ((voodoo>>2)&0x3) * 50;
     u32 magic_fix = voodoo & (1<<1);
     u32 load_svc = voodoo & (1<<0);
@@ -53,14 +53,14 @@ s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
     
     // lorem ipsum console init / exit
     if (lorem_ipsum) {
-        consoleInit(GFX_BOTTOM, NULL);
-        printf("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
-        consoleClear();
-        gfx_cycle();
-        consoleInit(GFX_TOP, NULL);
-        printf("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
-        consoleClear();
-        gfx_cycle();
+        u32 s = 0;
+        for (s = 0; s < 2; s++) {
+            if (!((lorem_ipsum>>s)&0x1)) continue;
+            consoleInit( (s==0) ? GFX_BOTTOM : GFX_TOP, NULL );
+            printf("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.");
+            consoleClear();
+            gfx_cycle();
+        }
         gfxSetScreenFormat(GFX_BOTTOM, GSP_BGR8_OES);
         gfxSetScreenFormat(GFX_TOP, GSP_BGR8_OES);
         gfx_cycle();

@@ -136,7 +136,7 @@ loc_1020D0:
 	MOV             R0, #4
 delay:
 	MOV             R1, #0
-        MCR             p15, 0, r1, c7, c10, 0
+	MCR             p15, 0, r1, c7, c10, 0
 	MCR             p15, 0, r1, c7, c10, 4
 loop:
 	SUBS            R0, #1
