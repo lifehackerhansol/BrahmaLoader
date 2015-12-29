@@ -40,14 +40,14 @@ s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
         aptInit();
         hidInit();
         acInit();
-        ptmInit();
+        ptmuInit();
     }
     
     // magic fix
     if (magic_fix) {
         // offset potential issues caused by homebrew that just ran
         aptOpenSession();
-        APT_SetAppCpuTimeLimit(NULL, 0);
+        APT_SetAppCpuTimeLimit(0);
         aptCloseSession();
     }
     
@@ -87,7 +87,7 @@ s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
     
     // unload services
     if (load_svc) {
-        ptmExit();
+        ptmuExit();
         acExit();
         hidExit();
         aptExit();
