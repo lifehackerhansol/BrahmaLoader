@@ -1,3 +1,4 @@
+
 [submodule "source/libkhax"]
 	path = source/libkhax
-	url = git://github.com/Myriachan/libkhax
+	url = git://github.com/Shadowtrance/libkhax
