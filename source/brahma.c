@@ -186,8 +186,8 @@ s32 load_arm9_payload (char *filename, u32 offset, u32 max_psize) {
 	u32 fsize = 0;
 	u32 psize = 0;
 
-    if ((max_psize == 0) || (max_psize > ARM9_PAYLOAD_MAX_SIZE))
-        max_psize = ARM9_PAYLOAD_MAX_SIZE;
+	if ((max_psize == 0) || (max_psize > ARM9_PAYLOAD_MAX_SIZE))
+		max_psize = ARM9_PAYLOAD_MAX_SIZE;
 
 	if (!filename)
 		return result;
@@ -197,9 +197,9 @@ s32 load_arm9_payload (char *filename, u32 offset, u32 max_psize) {
 		fseek(f, 0, SEEK_END);
 		fsize = ftell(f);
 		if (offset <= fsize) {
-            psize = fsize - offset;
-            if (offset > 0 && psize > max_psize)
-                psize = max_psize; // only fix when offset > 0
+			psize = fsize - offset;
+			if (offset > 0 && psize > max_psize)
+				psize = max_psize; // only fix when offset > 0
 			fseek(f, offset, SEEK_SET);
 			g_ext_arm9_size = psize;
 			if (psize >= 8 && (psize <= ARM9_PAYLOAD_MAX_SIZE)) {
@@ -350,14 +350,14 @@ s32 priv_firm_reboot (void) {
    function. otherwise, calling this function simply reboots
    the handheld */
 s32 firm_reboot (void) {
-    // Make sure gfx is initialized
-    gfxInitDefault();
+	// Make sure gfx is initialized
+	gfxInitDefault();
 
-    // Save the framebuffers for arm11.
-    frameBufferData[0] = (u32)gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL) + 0xC000000;
-    frameBufferData[1] = (u32)gfxGetFramebuffer(GFX_TOP, GFX_RIGHT, NULL, NULL) + 0xC000000;
-    frameBufferData[2] = (u32)gfxGetFramebuffer(GFX_BOTTOM, 0, NULL, NULL) + 0xC000000;
-    gfxSwapBuffers();
+	// Save the framebuffers for arm11.
+	frameBufferData[0] = (u32)gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL) + 0xC000000;
+	frameBufferData[1] = (u32)gfxGetFramebuffer(GFX_TOP, GFX_RIGHT, NULL, NULL) + 0xC000000;
+	frameBufferData[2] = (u32)gfxGetFramebuffer(GFX_BOTTOM, 0, NULL, NULL) + 0xC000000;
+	gfxSwapBuffers();
 
 	s32 fail_stage = 0;
 
