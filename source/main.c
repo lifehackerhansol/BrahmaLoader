@@ -131,8 +131,10 @@ s32 main (int argc, char **argv) {
         }
         #endif
         #endif
-        if (voodoo_load(path, offset, msize, voodoo))
+        if (voodoo_load(path, offset, msize, voodoo)) {
+            gfxExit();
             firm_reboot();
+        }
         brahma_exit();
     } else error_show("[!] Not enough memory");
 
