@@ -98,7 +98,6 @@ s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
 }
 
 s32 main (int argc, char **argv) {
-    char path[128] = { 0 };
     u32 offset = 0;
     u32 msize = 0;
     u32 voodoo = 0;
@@ -108,6 +107,7 @@ s32 main (int argc, char **argv) {
     gfxSwapBuffers();
 
     if (brahma_init()) {
+        char path[128] = { 0 };
         // Get payload parameters
         #ifdef VOODOO
         voodoo = VOODOO;
@@ -123,7 +123,7 @@ s32 main (int argc, char **argv) {
         #endif
         #else
         if (argc > 1) {
-            s32 res = sscanf(argv[1], "%128s %X %X %X", path, &offset, &msize, &voodoo);
+            s32 res = sscanf(argv[1], "%127s %X %X %X", path, &offset, &msize, &voodoo);
             if (res < 4) voodoo = 0;
             if (res < 3) msize = 0;
             if (res < 2) offset = 0;
