@@ -44,12 +44,12 @@ s32 voodoo_load(const char* path, u32 offset, u32 msize, u32 voodoo) {
     }
     
     // magic fix
-    /*if (magic_fix) {
+    if (magic_fix) {
         // offset potential issues caused by homebrew that just ran
-        aptOpenSession();
+        // aptOpenSession();
         APT_SetAppCpuTimeLimit(0);
-        aptCloseSession();
-    }*/
+        // aptCloseSession();
+    }
     
     // lorem ipsum console init / exit
     if (lorem_ipsum) {
